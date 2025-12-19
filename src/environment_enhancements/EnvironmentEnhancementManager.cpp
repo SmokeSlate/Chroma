@@ -546,8 +546,7 @@ void EnvironmentEnhancementManager::Init(CustomJSONData::CustomBeatmapData* cust
       if (trackLaneRing != nullptr) {
         controllerData.RotationUpdate += [=]() { RingRotationOffsets[trackLaneRing] = trackLaneRing->transform->get_localRotation(); };
         controllerData.PositionUpdate += [=]() { trackLaneRing->_positionOffset = trackLaneRing->transform->get_localPosition(); };
-      }
-      if (parametricBoxController != nullptr) {
+      }else if (parametricBoxController != nullptr) {
         auto* parametricBoxControllerTransform = parametricBoxController->get_transform().ptr();
         controllerData.ScaleUpdate += [=]() {
           ParametricBoxControllerParameters::SetTransformScale(parametricBoxController, parametricBoxControllerTransform->get_localScale());
@@ -558,9 +557,9 @@ void EnvironmentEnhancementManager::Init(CustomJSONData::CustomBeatmapData* cust
         };
       }
 
-      // for (auto track : tracks) {
-      //   track.RegisterGameObject(gameObject);
-      // }
+      for (const auto& track : tracks) {
+        track.RegisterGameObject(gameObject);
+      }
 
       // BS 1.37+ apparently doesn't need this
       // if (beatmapObjectsAvoidance != nullptr) {
@@ -605,7 +604,7 @@ void EnvironmentEnhancementManager::Init(CustomJSONData::CustomBeatmapData* cust
 
   if (!animatedMaterials.empty()) {
     auto* animated = UnityEngine::GameObject::New_ctor("MaterialAnimator")->AddComponent<MaterialAnimator*>();
-    animated->context = TracksAD::getBeatmapAD(customBeatmapData->customData).internal_tracks_context;
+    // animated->context = TracksAD::getBeatmapAD(customBeatmapData->customData).internal_tracks_context;
     animated->materials = std::move(animatedMaterials);
   }
 }

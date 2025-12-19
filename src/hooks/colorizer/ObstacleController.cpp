@@ -13,6 +13,7 @@
 #include "AnimationHelper.hpp"
 
 #include "utils/ChromaAudioTimeSourceHelper.hpp"
+#include <vector>
 
 using namespace CustomJSONData;
 using namespace GlobalNamespace;
@@ -55,14 +56,16 @@ MAKE_HOOK_MATCH(ObstacleController_ManualUpdate, &ObstacleController::ManualUpda
 
   auto chromaData = ChromaObjectDataManager::ChromaObjectDatas.find(self->obstacleData);
   if (chromaData != ChromaObjectDataManager::ChromaObjectDatas.end()) {
+
     auto const& tracks = chromaData->second.Tracks;
+
     auto const& pathPointDefinition = chromaData->second.LocalPathColor;
     if (!tracks.empty() || pathPointDefinition) {
       float jumpDuration = self->_variableMovementDataProvider->jumpDuration;
       float elapsedTime =
           ChromaTimeSourceHelper::getSongTimeChroma(self->_audioTimeSyncController) - self->_startTimeOffset;
       float normalTime =
-          (elapsedTime - self->_variableMovementDataProvider->moveDuration) / (jumpDuration + self->_obstacleDuration);
+          (elapsedTime - self->_variableMovementDataProvider->moveDuration) / (jumpDuration + self->obstacleData->duration);
 
       [[maybe_unused]] bool updated = false;
       std::optional<Sombrero::FastColor> colorOffset =

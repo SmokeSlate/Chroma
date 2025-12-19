@@ -52,9 +52,13 @@ MAKE_HOOK_MATCH(NoteController_Update, &NoteController::ManualUpdate, void, Note
     return;
   }
 
+
+
   auto chromaData = ChromaObjectDataManager::ChromaObjectDatas.find(self->noteData);
   if (chromaData != ChromaObjectDataManager::ChromaObjectDatas.end()) {
     auto const& tracks = chromaData->second.Tracks;
+
+
     auto pathPointDefinition = chromaData->second.LocalPathColor;
     if (!tracks.empty() || pathPointDefinition) {
       NoteJump* noteJump = self->_noteMovement->_jump;
